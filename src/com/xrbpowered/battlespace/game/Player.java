@@ -4,8 +4,10 @@ import java.awt.Point;
 
 import com.xrbpowered.battlespace.net.MsgPlayerDestroyed;
 import com.xrbpowered.battlespace.net.MsgPlayerStatus;
+import com.xrbpowered.battlespace.ui.EntityRenderer;
+import com.xrbpowered.battlespace.ui.PlayerRenderer;
 
-public class Player extends Entity {
+public class Player extends Entity<Player> {
 
 	public static final float RADIUS = 20.0f;
 	
@@ -41,6 +43,13 @@ public class Player extends Entity {
 		super(game);
 		this.name = name;
 		destroy(0, game.getNewPickupLocation());
+	}
+	
+	private static final PlayerRenderer renderer = new PlayerRenderer();
+	
+	@Override
+	public EntityRenderer<Player> renderer() {
+		return renderer;
 	}
 	
 	@Override
@@ -133,7 +142,7 @@ public class Player extends Entity {
 	public void update(long dt) {
 		if(!isRespawning()) {
 			if(game.isServer() && !getTimer(PRIMARY_COOLDOWN).isActive() && triggers[PRIMARY_TRIGGER]) {
-				game.addProjectile(new Projectile(game, this, Projectile.TYPE_MINI).shoot(this, 0f));
+				game.addEntity(new Projectile(game, this, Projectile.TYPE_MINI).shoot(this, 0f));
 				getTimer(PRIMARY_COOLDOWN).start();
 			}
 			/*if(game.isServer() && !getTimer(SECONDARY_COOLDOWN).isActive() && triggers[SECONDARY_TRIGGER]) {

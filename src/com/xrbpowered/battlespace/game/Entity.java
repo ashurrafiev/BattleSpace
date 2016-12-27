@@ -1,16 +1,21 @@
 package com.xrbpowered.battlespace.game;
 
-public class Entity {
+import com.xrbpowered.battlespace.ui.EntityRenderer;
+
+public abstract class Entity<T extends Entity<T>> {
 
 	public float x, y, angle;
 	public float vx, vy;
 	public boolean destroyed = false;
 
 	public final Game game;
-	
+	public int uid = -1;
+
 	public Entity(Game game) {
 		this.game = game;
 	}
+	
+	public abstract EntityRenderer<T> renderer();
 	
 	protected void updateAngle() {
 		this.angle = (float) Math.atan2(vy, vx);
@@ -35,7 +40,7 @@ public class Entity {
 		updateLocation(dt);
 	}
 	
-	public float distBetween(Entity other) {
+	public float distBetween(Entity<?> other) {
 		float dx = this.x-other.x;
 		float dy = this.y-other.y;
 		return (float)Math.sqrt(dx*dx+dy*dy);

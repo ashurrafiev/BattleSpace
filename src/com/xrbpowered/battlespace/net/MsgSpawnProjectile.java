@@ -12,7 +12,7 @@ import com.xrbpowered.net.NetBase;
 import com.xrbpowered.net.NetMessage;
 
 public class MsgSpawnProjectile extends NetMessage {
-	public static final byte CMD = 16;
+	public static final byte CMD = 17;
 	
 	public final int uid;
 	public final int ownerIndex, type;
@@ -60,7 +60,7 @@ public class MsgSpawnProjectile extends NetMessage {
 			proj.uid = uid;
 			proj.setPosition(x, y);
 			proj.setVelocity(vx, vy);
-			game.addProjectile(proj);
+			game.addEntity(proj);
 			return true;
 		}
 		else

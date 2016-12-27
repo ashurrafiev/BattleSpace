@@ -56,13 +56,16 @@ public class BotPlayer extends ClientPlayer {
 				dist = d.length();
 				res.addScaled(d, 0.1f/(dist*dist+1f));
 			}
-		for(Projectile proj: game.projectiles)
-			if(!proj.destroyed) {
-				Vec2 p = new Vec2(proj.x, proj.y).addScaled(new Vec2(proj.vx, proj.vy), 10f);
-				Vec2 d = Vec2.subtract(null, here, p);
-				dist = d.length();
-				if(dist<200f)
-					res.addScaled(d, 0.05f/(dist*dist+1f));
+		for(Entity<?> e : game.entities)
+			if(e instanceof Projectile) {
+				Projectile proj = (Projectile) e;
+				if(!proj.destroyed) {
+					Vec2 p = new Vec2(proj.x, proj.y).addScaled(new Vec2(proj.vx, proj.vy), 10f);
+					Vec2 d = Vec2.subtract(null, here, p);
+					dist = d.length();
+					if(dist<200f)
+						res.addScaled(d, 0.05f/(dist*dist+1f));
+				}
 			}
 		res.normalise();
 		

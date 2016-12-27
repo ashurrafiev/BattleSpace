@@ -2,9 +2,11 @@ package com.xrbpowered.battlespace.game;
 
 import java.awt.Color;
 
-import com.xrbpowered.battlespace.net.MsgRemoveProjectile;
+import com.xrbpowered.battlespace.net.MsgRemoveEntity;
+import com.xrbpowered.battlespace.ui.EntityRenderer;
+import com.xrbpowered.battlespace.ui.ProjectileRenderer;
 
-public class Projectile extends Entity {
+public class Projectile extends Entity<Projectile> {
 
 	public static final int TYPE_MINI = 0;
 	public static final int TYPE_SPREAD = 1;
@@ -29,7 +31,6 @@ public class Projectile extends Entity {
 	
 	public final Player owner;
 	public final int type;
-	public int uid = -1;
 	
 	public Projectile(Game game, Player owner, int type) {
 		super(game);
@@ -37,10 +38,17 @@ public class Projectile extends Entity {
 		this.type = type;
 	}
 	
+	private static ProjectileRenderer renderer = new ProjectileRenderer();
+	
+	@Override
+	public EntityRenderer<Projectile> renderer() {
+		return renderer;
+	}
+	
 	@Override
 	protected void destroy() {
 		if(game.isServer()) {
-			game.net.broadcastMessage(new MsgRemoveProjectile(this), null);
+			game.net.broadcastMessage(new MsgRemoveEntity(this), null);
 		}
 		super.destroy();
 	}

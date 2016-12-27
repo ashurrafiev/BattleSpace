@@ -4,23 +4,24 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import com.xrbpowered.battlespace.game.Entity;
 import com.xrbpowered.battlespace.game.Game;
 import com.xrbpowered.battlespace.game.Projectile;
 import com.xrbpowered.net.Connection;
 import com.xrbpowered.net.NetBase;
 import com.xrbpowered.net.NetMessage;
 
-public class MsgRemoveProjectile extends NetMessage {
-	public static final byte CMD = 17;
+public class MsgRemoveEntity extends NetMessage {
+	public static final byte CMD = 16;
 	
 	public final int uid;
 
-	public MsgRemoveProjectile(Projectile proj) {
+	public MsgRemoveEntity(Projectile proj) {
 		super(CMD);
 		this.uid = proj.uid;
 	}
 	
-	public MsgRemoveProjectile(DataInputStream in) throws IOException {
+	public MsgRemoveEntity(DataInputStream in) throws IOException {
 		super(CMD);
 		this.uid = in.readInt();
 	}
@@ -34,9 +35,9 @@ public class MsgRemoveProjectile extends NetMessage {
 	public boolean process(NetBase net, Connection c) {
 		if(!net.isServer()) {
 			Game game = ((BSNetClient) net).game;
-			Projectile proj = game.projectileUidMap.get(uid);
-			if(proj!=null)
-				proj.destroyed = true;
+			Entity<?> e = game.entityUidMap.get(uid);
+			if(e!=null)
+				e.destroyed = true;
 			return true;
 		}
 		else

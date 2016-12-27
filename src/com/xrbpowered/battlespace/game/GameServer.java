@@ -12,9 +12,12 @@ public class GameServer extends Game {
 	}
 	
 	@Override
-	public void addProjectile(Projectile proj) {
-		super.addProjectile(proj);
-		net.broadcastMessage(new MsgSpawnProjectile(proj), null);
+	public void addEntity(Entity<?> e) {
+		super.addEntity(e);
+		// FIXME entity spawn packet
+		if(e instanceof Projectile) {
+			net.broadcastMessage(new MsgSpawnProjectile((Projectile) e), null);
+		}
 	}
 
 }

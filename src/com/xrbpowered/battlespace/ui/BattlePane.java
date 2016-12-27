@@ -1,6 +1,5 @@
 package com.xrbpowered.battlespace.ui;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -18,10 +17,9 @@ import javax.swing.JPanel;
 
 import com.xrbpowered.battlespace.BattleSpaceClient;
 import com.xrbpowered.battlespace.game.ClientPlayer;
+import com.xrbpowered.battlespace.game.Entity;
 import com.xrbpowered.battlespace.game.Game;
 import com.xrbpowered.battlespace.game.Player;
-import com.xrbpowered.battlespace.game.Projectile;
-import com.xrbpowered.battlespace.game.Projectile.ProjectileInfo;
 import com.xrbpowered.battlespace.ui.MessageLog.MessageItem;
 
 public class BattlePane extends JPanel {
@@ -99,6 +97,13 @@ public class BattlePane extends JPanel {
 		}
 	}
 	
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	private void renderEntities(Graphics2D g2) {
+		for(Entity e : client.getGame().entities) {
+			e.renderer().render(g2, e);
+		}
+	}
+	
 	@Override
 	protected void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
@@ -108,42 +113,18 @@ public class BattlePane extends JPanel {
 		g2.setFont(StatusPane.FONT);
 		FontMetrics fm = g2.getFontMetrics();
 		
+		// render entities
+		g2.translate(SIZE/2, SIZE/2);
 		for(int i=0; i<Game.MAX_PLAYERS; i++) {
 			Player player = client.getGame().players[i];
 			if(player==null)
 				continue;
-			g2.setStroke(new BasicStroke(2f));
-			if(!player.isRespawning()) {
-				g2.setColor(player==client.getPlayer() ? Color.WHITE : Color.RED);
-				g2.drawOval((int)(player.x+SIZE/2-Player.RADIUS), (int)(player.y+SIZE/2-Player.RADIUS), (int)(Player.RADIUS*2f), (int)(Player.RADIUS*2f));
-				g2.drawLine((int)(player.x+SIZE/2), (int)(player.y+SIZE/2),
-						(int)(player.x+SIZE/2+Player.RADIUS*1.2f*Math.cos(player.angle)),
-						(int)(player.y+SIZE/2+Player.RADIUS*1.2f*Math.sin(player.angle)));
-				g2.drawString(player.name, (int)(player.x+SIZE/2-fm.stringWidth(player.name)/2), (int)(player.y+SIZE/2+Player.RADIUS+15));
-				if(player.isShielded()) {
-					g2.setColor(Color.CYAN);
-					g2.drawOval((int)(player.x+SIZE/2-Player.RADIUS-7), (int)(player.y+SIZE/2-Player.RADIUS-7), (int)(Player.RADIUS*2f+14), (int)(Player.RADIUS*2f+14));
-				}
-			}
-			else {
-				long ts = player.getTimer(Player.RESPAWN_TIMER).remaining();
-				if(ts<500L) {
-					float r = Player.RADIUS*2f*ts/500f;
-					g2.setColor(Color.CYAN);
-					g2.drawOval((int)(player.x+SIZE/2-r), (int)(player.y+SIZE/2-r), (int)(r*2f), (int)(r*2f));
-				}
-			}
+			player.renderer().render(g2, player);
 		}
+		renderEntities(g2);
+		g2.translate(-SIZE/2, -SIZE/2);
 		
-		g2.setStroke(new BasicStroke(1.5f));
-		for(Projectile proj : client.getGame().projectiles) {
-			ProjectileInfo info = Projectile.INFO[proj.type];
-			g2.setColor(info.color);
-			g2.drawLine((int)(proj.x+SIZE/2), (int)(proj.y+SIZE/2),
-					(int)(proj.x+SIZE/2-info.traceLength*Math.cos(proj.angle)),
-					(int)(proj.y+SIZE/2-info.traceLength*Math.sin(proj.angle)));
-		}
-		
+		// render mid-screen message
 		Player player = client.getPlayer();
 		if(player!=null && player.isRespawning()) {
 			g2.setColor(Color.WHITE);
@@ -165,6 +146,7 @@ public class BattlePane extends JPanel {
 			g2.drawString(s, SIZE/2-fm.stringWidth(s)/2, SIZE/2-30);
 		}
 		
+		// render message log
 		long t = System.currentTimeMillis();
 		int y = 30;
 		g2.setFont(StatusPane.CHAT_FONT);

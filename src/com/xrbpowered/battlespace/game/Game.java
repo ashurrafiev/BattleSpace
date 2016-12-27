@@ -28,8 +28,8 @@ public class Game {
 	public Player[] players = new Player[MAX_PLAYERS];
 	
 	private int nextProjUid = 0;
-	public List<Projectile> projectiles = new ArrayList<>();
-	public HashMap<Integer, Projectile> projectileUidMap = new HashMap<>();
+	public List<Entity<?>> entities = new ArrayList<>();
+	public HashMap<Integer, Entity<?>> entityUidMap = new HashMap<>();
 	
 	public int addPlayer(Player player) {
 		for(int i=0; i<players.length; i++) {
@@ -46,15 +46,15 @@ public class Game {
 		return true;
 	}
 
-	public void addProjectile(Projectile proj) {
-		if(proj.uid<0) {
+	public void addEntity(Entity<?> e) {
+		if(e.uid<0) {
 			int uid = nextProjUid++;
 			if(nextProjUid<0)
 				nextProjUid = 0;
-			proj.uid = uid;
+			e.uid = uid;
 		}
-		projectiles.add(proj);
-		projectileUidMap.put(proj.uid, proj);		
+		entities.add(e);
+		entityUidMap.put(e.uid, e);		
 	}
 	
 	public void update(long dt) {
@@ -62,12 +62,12 @@ public class Game {
 			if(player!=null)
 				player.update(dt);
 		}
-		for(Iterator<Projectile> i = projectiles.iterator(); i.hasNext();) {
-			Projectile proj = i.next();
-			if(!proj.destroyed)
-				proj.update(dt);
-			if(proj.destroyed) {
-				projectileUidMap.remove(proj.uid);
+		for(Iterator<Entity<?>> i = entities.iterator(); i.hasNext();) {
+			Entity<?> e = i.next();
+			if(!e.destroyed)
+				e.update(dt);
+			if(e.destroyed) {
+				entityUidMap.remove(e.uid);
 				i.remove();
 			}
 		}
