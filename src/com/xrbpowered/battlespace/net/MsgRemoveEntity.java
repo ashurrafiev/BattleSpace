@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import com.xrbpowered.battlespace.game.Entity;
 import com.xrbpowered.battlespace.game.Game;
-import com.xrbpowered.battlespace.game.Projectile;
 import com.xrbpowered.net.Connection;
 import com.xrbpowered.net.NetBase;
 import com.xrbpowered.net.NetMessage;
@@ -16,9 +15,9 @@ public class MsgRemoveEntity extends NetMessage {
 	
 	public final int uid;
 
-	public MsgRemoveEntity(Projectile proj) {
+	public MsgRemoveEntity(Entity<?> e) {
 		super(CMD);
-		this.uid = proj.uid;
+		this.uid = e.uid;
 	}
 	
 	public MsgRemoveEntity(DataInputStream in) throws IOException {

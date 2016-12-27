@@ -126,11 +126,21 @@ public class Player extends Entity<Player> {
 				else
 					this.addScore(-1);
 			}
+			// TODO explode
 			destroy();
 		}
 		else {
 			game.net.broadcastMessage(new MsgPlayerStatus(this, MsgPlayerStatus.HEALTH, this.health), null);
 		}
+	}
+	
+	public void restoreHealth(int hp) {
+		if(!game.isServer())
+			return;
+		health += hp;
+		if(health>200)
+			health = 200;
+		game.net.broadcastMessage(new MsgPlayerStatus(this, MsgPlayerStatus.HEALTH, this.health), null);
 	}
 	
 	protected void updateTimers(long dt) {

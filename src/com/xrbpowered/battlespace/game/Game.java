@@ -28,6 +28,7 @@ public class Game {
 	public Player[] players = new Player[MAX_PLAYERS];
 	
 	private int nextProjUid = 0;
+	public List<Entity<?>> newEntities = new ArrayList<>();
 	public List<Entity<?>> entities = new ArrayList<>();
 	public HashMap<Integer, Entity<?>> entityUidMap = new HashMap<>();
 	
@@ -53,7 +54,7 @@ public class Game {
 				nextProjUid = 0;
 			e.uid = uid;
 		}
-		entities.add(e);
+		newEntities.add(e);
 		entityUidMap.put(e.uid, e);		
 	}
 	
@@ -71,6 +72,9 @@ public class Game {
 				i.remove();
 			}
 		}
+		
+		entities.addAll(newEntities);
+		newEntities.clear();
 	}
 	
 	public Point getNewPickupLocation() {

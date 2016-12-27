@@ -68,10 +68,12 @@ public class BSNetClient extends NetClient {
 			case MsgPlayerStatus.CMD:
 				return new MsgPlayerStatus(in);
 				
-			case MsgSpawnProjectile.CMD:
-				return new MsgSpawnProjectile(in);
 			case MsgRemoveEntity.CMD:
 				return new MsgRemoveEntity(in);
+			case MsgSpawnProjectile.CMD:
+				return new MsgSpawnProjectile(in);
+			case MsgSpawnPickup.CMD:
+				return new MsgSpawnPickup(in);
 				
 			case MsgChat.CMD:
 				return new MsgChat(in.readUTF());

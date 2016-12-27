@@ -2,9 +2,10 @@ package com.xrbpowered.battlespace.game;
 
 import java.awt.Color;
 
-import com.xrbpowered.battlespace.net.MsgRemoveEntity;
+import com.xrbpowered.battlespace.net.MsgSpawnProjectile;
 import com.xrbpowered.battlespace.ui.EntityRenderer;
 import com.xrbpowered.battlespace.ui.ProjectileRenderer;
+import com.xrbpowered.net.NetMessage;
 
 public class Projectile extends Entity<Projectile> {
 
@@ -46,26 +47,10 @@ public class Projectile extends Entity<Projectile> {
 	}
 	
 	@Override
-	protected void destroy() {
-		if(game.isServer()) {
-			game.net.broadcastMessage(new MsgRemoveEntity(this), null);
-		}
-		super.destroy();
+	public NetMessage createSpawnMessage() {
+		return new MsgSpawnProjectile(this);
 	}
 	
-	public Projectile setPosition(float x, float y) {
-		this.x = x;
-		this.y = y;
-		return this;
-	}
-
-	public Projectile setVelocity(float vx, float vy) {
-		this.vx = vx;
-		this.vy = vy;
-		updateAngle();
-		return this;
-	}
-
 	public Projectile shoot(Player player, float da) {
 		da = (float)Math.PI*da/180f;
 		float pvx = (float)Math.cos(player.angle+da);
@@ -77,16 +62,19 @@ public class Projectile extends Entity<Projectile> {
 	}
 	
 	@Override
+	public boolean canTriggerOverlapPlayer(Player player) {
+		return player!=owner;
+	}
+	
+	@Override
+	public void onOverlapPlayer(Player player) {
+		player.receiveDamage(INFO[type].damage, owner);
+		destroy();
+	}
+	
+	@Override
 	public void update(long dt) {
-		if(game.isServer()) {
-			for(Player player : game.players) {
-				if(player!=null && player!=owner && !player.isRespawning() && this.distBetween(player)<=Player.RADIUS) {
-					player.receiveDamage(INFO[type].damage, owner);
-					destroy();
-					return;
-				}
-			}
-		}
+		checkPlayerOverlaps(Player.RADIUS);
 		super.update(dt);
 	}
 	

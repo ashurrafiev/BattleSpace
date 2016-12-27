@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 
+import com.xrbpowered.battlespace.game.Entity;
 import com.xrbpowered.battlespace.game.GameServer;
 import com.xrbpowered.battlespace.game.Player;
 import com.xrbpowered.net.Connection;
@@ -57,6 +58,10 @@ public class BSNetServer extends NetServer {
 				target.addMessage(new MsgPlayerStatus(info.player, MsgPlayerStatus.RESPAWN_TIMER, (int) info.player.getTimer(Player.RESPAWN_TIMER).remaining()));
 				target.addMessage(new MsgPlayerStatus(info.player, MsgPlayerStatus.EFFECT_TIMER, (int) info.player.getTimer(Player.EFFECT_TIMER).remaining()));
 			}
+		}
+		for(Entity<?> e : game.entities) {
+			if(e.uid>=0)
+				target.addMessage(e.createSpawnMessage());
 		}
 	}
 	
