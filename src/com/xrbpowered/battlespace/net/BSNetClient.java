@@ -67,6 +67,8 @@ public class BSNetClient extends NetClient {
 				return new MsgPlayerDestroyed(in);
 			case MsgPlayerStatus.CMD:
 				return new MsgPlayerStatus(in);
+			case MsgPlayerPush.CMD:
+				return new MsgPlayerPush(in);
 				
 			case MsgRemoveEntity.CMD:
 				return new MsgRemoveEntity(in);
@@ -74,6 +76,8 @@ public class BSNetClient extends NetClient {
 				return new MsgSpawnProjectile(in);
 			case MsgSpawnPickup.CMD:
 				return new MsgSpawnPickup(in);
+			case MsgSpawnExplosion.CMD:
+				return new MsgSpawnExplosion(in);
 				
 			case MsgChat.CMD:
 				return new MsgChat(in.readUTF());

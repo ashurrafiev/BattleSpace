@@ -54,6 +54,14 @@ public class ClientPlayer extends Player {
 	}
 	
 	@Override
+	public void push(float px, float py) {
+		if(!isRespawning()) {
+			vx += px;
+			vy += py;
+		}
+	}
+	
+	@Override
 	protected boolean checkClip() {
 		if(super.checkClip()) {
 			deathMessage = "Lost in space.";

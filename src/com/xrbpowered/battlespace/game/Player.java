@@ -3,6 +3,7 @@ package com.xrbpowered.battlespace.game;
 import java.awt.Point;
 
 import com.xrbpowered.battlespace.net.MsgPlayerDestroyed;
+import com.xrbpowered.battlespace.net.MsgPlayerPush;
 import com.xrbpowered.battlespace.net.MsgPlayerStatus;
 import com.xrbpowered.battlespace.ui.EntityRenderer;
 import com.xrbpowered.battlespace.ui.PlayerRenderer;
@@ -126,11 +127,17 @@ public class Player extends Entity<Player> {
 				else
 					this.addScore(-1);
 			}
-			// TODO explode
+			game.addEntity(new Explosion(game, this, x, y, 0.5f, 0L));
 			destroy();
 		}
 		else {
 			game.net.broadcastMessage(new MsgPlayerStatus(this, MsgPlayerStatus.HEALTH, this.health), null);
+		}
+	}
+	
+	public void push(float px, float py) {
+		if(game.isServer()) {
+			game.net.broadcastMessage(new MsgPlayerPush(this, px, py), null); // FIXME exclusive to player
 		}
 	}
 	

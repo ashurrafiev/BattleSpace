@@ -10,7 +10,7 @@ public class PickupRenderer implements EntityRenderer<Pickup> {
 
 	@Override
 	public void render(Graphics2D g2, Pickup p) {
-		g2.setStroke(new BasicStroke(2f));
+		g2.setStroke(new BasicStroke(1f));
 		g2.setColor(p.getColor());
 		g2.drawOval((int)(p.x-Pickup.RADIUS), (int)(p.y-Pickup.RADIUS), (int)(Pickup.RADIUS*2f), (int)(Pickup.RADIUS*2f));
 		FontMetrics fm = g2.getFontMetrics();
