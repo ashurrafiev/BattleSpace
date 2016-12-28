@@ -14,10 +14,17 @@ import com.xrbpowered.net.NetServer;
 
 public class BSNetServer extends NetServer {
 
+	public static final int VERSION = 100;
+	
 	public GameServer game = null;
 	
 	public BSNetServer(int port) {
 		super(port);
+	}
+	
+	@Override
+	public int getVersion() {
+		return VERSION;
 	}
 	
 	public void addGame(GameServer game) {

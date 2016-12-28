@@ -15,7 +15,7 @@ public class PickupFactory {
 	
 	public static final int WEAPON_BASE = 4;
 	
-	private static final int[] weights = {6, 3, 1, 4, 1, 1, 1}; 
+	private static final int[] weights = {6, 3, 1, 4, 1, 1, 1, 1, 1, 1}; 
 
 	private static final int MAX_PICKUPS = 5;
 	private static final long RESPAWN_TIME = 5000L;

@@ -1,6 +1,7 @@
 package com.xrbpowered.battlespace.game;
 
 import com.xrbpowered.battlespace.ui.EntityRenderer;
+import com.xrbpowered.battlespace.ui.SmokeRenderer;
 import com.xrbpowered.utils.TweenUtils;
 
 public class Particle extends Entity<Particle> {
@@ -36,6 +37,12 @@ public class Particle extends Entity<Particle> {
 			super.update(dt);
 		else
 			destroy();
+	}
+	
+	public static Particle createSmoke(Game game, Entity<?> origin, float power) {
+		Particle p = (Particle) new Particle(game, power*0.5f+0.5f, SmokeRenderer.instance, 750L).sling(origin, Game.random.nextFloat()*360f, 0.005f, 3f*power);
+		game.newEntities.add(p);
+		return p;
 	}
 
 }

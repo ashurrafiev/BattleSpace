@@ -24,6 +24,11 @@ public class BSNetClient extends NetClient {
 		open(); // TODO connection progress display
 	}
 
+	@Override
+	public int getVersion() {
+		return BSNetServer.VERSION;
+	}
+	
 	public int counter = 0;
 	
 	@Override
@@ -70,6 +75,8 @@ public class BSNetClient extends NetClient {
 			case MsgPlayerPush.CMD:
 				return new MsgPlayerPush(in);
 				
+			case MsgEntityPos.CMD:
+				return new MsgEntityPos(in);
 			case MsgRemoveEntity.CMD:
 				return new MsgRemoveEntity(in);
 			case MsgSpawnProjectile.CMD:
@@ -80,6 +87,8 @@ public class BSNetClient extends NetClient {
 				return new MsgSpawnExplosion(in);
 			case MsgSpawnMissile.CMD:
 				return new MsgSpawnMissile(in);
+			case MsgSpawnStaticEntity.CMD:
+				return new MsgSpawnStaticEntity(in);
 				
 			case MsgChat.CMD:
 				return new MsgChat(in.readUTF());

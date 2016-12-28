@@ -44,6 +44,17 @@ public abstract class Entity<T extends Entity<T>> {
 		return this;
 	}
 	
+	public Entity<T> setAngleSpeed(float angle, float speed) {
+		this.angle = angle;
+		if(angle>Math.PI*2f)
+			angle -= Math.PI*2f;
+		else if(angle<0f)
+			angle += Math.PI*2f;
+		this.vx = speed * (float) Math.cos(angle);
+		this.vy = speed * (float) Math.sin(angle);
+		return this;
+	}
+	
 	protected void updateAngle() {
 		this.angle = (float) Math.atan2(vy, vx);
 	}
@@ -56,15 +67,25 @@ public abstract class Entity<T extends Entity<T>> {
 	}
 	
 	protected Entity<T> sling(Entity<?> origin, float da, float speed, float forward) {
-			da = (float)Math.PI*da/180f;
-			float pvx = (float)Math.cos(origin.angle+da);
-			float pvy = (float)Math.sin(origin.angle+da);
-			setVelocity(speed*pvx, speed*pvy);
-			setPosition(origin.x+forward*pvx, origin.y+forward*pvy);
-			updateAngle();
-			return this;
+		da = (float)Math.PI*da/180f;
+		float pvx = (float)Math.cos(origin.angle+da);
+		float pvy = (float)Math.sin(origin.angle+da);
+		setVelocity(speed*pvx, speed*pvy);
+		setPosition(origin.x+forward*pvx, origin.y+forward*pvy);
+		return this;
 	}
-	
+
+	protected Entity<T> offset(Entity<?> origin, float da, float forward) {
+		da = (float)Math.PI*da/180f;
+		float pvx = (float)Math.cos(origin.angle+da);
+		float pvy = (float)Math.sin(origin.angle+da);
+		setPosition(origin.x+forward*pvx, origin.y+forward*pvy);
+		this.vx = 0f;
+		this.vy = 0f;
+		this.angle = 0f;
+		return this;
+	}
+
 	protected boolean checkClip() {
 		return !Game.CLIP_RECT.contains(this.x, this.y);
 	}

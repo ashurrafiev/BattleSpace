@@ -8,7 +8,7 @@ import com.xrbpowered.utils.ColorUtils;
 
 public class SmokeRenderer implements EntityRenderer<Particle> {
 
-	public static final Color COLOR = new Color(0xaaaaaa);
+	public static final Color COLOR = new Color(0x999999);
 	public static final float BASE_SIZE = 20f;
 	
 	public static final SmokeRenderer instance = new SmokeRenderer();

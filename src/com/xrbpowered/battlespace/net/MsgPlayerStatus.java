@@ -7,6 +7,7 @@ import java.io.IOException;
 import com.xrbpowered.battlespace.game.Game;
 import com.xrbpowered.battlespace.game.Player;
 import com.xrbpowered.battlespace.game.Weapon;
+import com.xrbpowered.battlespace.ui.DamageText;
 import com.xrbpowered.net.Connection;
 import com.xrbpowered.net.NetBase;
 import com.xrbpowered.net.NetMessage;
@@ -55,6 +56,7 @@ public class MsgPlayerStatus extends NetMessage {
 				return false;
 			switch(var) {
 				case HEALTH:
+					DamageText.create(game, player, value-player.health);
 					player.health = value;
 					return true;
 				case SCORE:

@@ -8,7 +8,7 @@ import com.xrbpowered.net.NetMessage;
 public class Explosion extends Entity<Explosion> {
 	
 	public static final long DURATION = 250L;
-	public static final float BASE_DAMAGE = 100f;
+	public static final float BASE_DAMAGE = 150f;
 	public static final float BASE_HIT_RADIUS= 300f;
 	public static final float BASE_PUSH = 1f;
 	
@@ -23,6 +23,7 @@ public class Explosion extends Entity<Explosion> {
 		setPosition(x, y);
 		this.owner = owner;
 		this.power = power;
+		this.age = age;
 	}
 
 	private static ExplosionRenderer renderer = new ExplosionRenderer();

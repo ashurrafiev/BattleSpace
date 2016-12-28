@@ -59,12 +59,6 @@ public class Projectile extends Entity<Projectile> {
 	
 	public Projectile shoot(Player player, float da) {
 		sling(player, da, INFO[type].speed, Player.RADIUS*2f+INFO[type].speed*25f);
-/*		da = (float)Math.PI*da/180f;
-		float pvx = (float)Math.cos(player.angle+da);
-		float pvy = (float)Math.sin(player.angle+da);
-		setVelocity(INFO[type].speed*pvx, INFO[type].speed*pvy);
-		setPosition(player.x+Player.RADIUS*2f*pvx+vx*25f, player.y+Player.RADIUS*2f*pvy+vy*25f);
-		updateAngle();*/
 		return this;
 	}
 	
