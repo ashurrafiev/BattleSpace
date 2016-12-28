@@ -13,11 +13,16 @@ public class ProjectileRenderer implements EntityRenderer<Projectile> {
 	
 	@Override
 	public void render(Graphics2D g2, Projectile proj) {
-		g2.setStroke(STROKE);
 		ProjectileInfo info = Projectile.INFO[proj.type];
 		g2.setColor(info.color);
-		g2.drawLine((int)(proj.x), (int)(proj.y),
-				(int)(proj.x-info.traceLength*Math.cos(proj.angle)),
-				(int)(proj.y-info.traceLength*Math.sin(proj.angle)));
+		if(info.circle) {
+			g2.fillOval((int)(proj.x-info.size), (int)(proj.y-info.size), (int)(info.size*2f), (int)(info.size*2f));
+		}
+		else {
+			g2.setStroke(STROKE);
+			g2.drawLine((int)(proj.x), (int)(proj.y),
+					(int)(proj.x-info.size*Math.cos(proj.angle)),
+					(int)(proj.y-info.size*Math.sin(proj.angle)));
+		}
 	}
 }

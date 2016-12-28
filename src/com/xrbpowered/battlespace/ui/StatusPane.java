@@ -61,6 +61,17 @@ public class StatusPane extends JPanel {
 			g2.drawString(String.format("%d", player.isRespawning() ? 0 : player.health), 10, 75);
 			g2.setColor(Color.LIGHT_GRAY);
 			g2.drawString(String.format("%d", player.score), 150, 75);
+			
+			// weapon
+			if(player.secondaryWeapon!=null) {
+				g2.setColor(Color.WHITE);
+				g2.setFont(BOLD_FONT);
+				g2.drawString(player.secondaryWeapon.name, 10, 120);
+				g2.setFont(BIG_FONT);
+				g2.drawString(String.format("%d", player.ammo), 150, 120);
+			}
+			
+			// latency
 			if(player==client.getPlayer()) {
 				NetClient net = (NetClient) client.getGame().net;
 				if(net.isConnected()) {

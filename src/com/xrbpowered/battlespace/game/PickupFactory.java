@@ -11,11 +11,14 @@ public class PickupFactory {
 	public static final int HEALTH_25 = 0;
 	public static final int HEALTH_50 = 1;
 	public static final int HEALTH_100 = 2;
+	public static final int AMMO = 3;
 	
-	private static final int[] weights = {7, 3, 1}; 
+	public static final int WEAPON_BASE = 4;
+	
+	private static final int[] weights = {6, 3, 1, 4, 1, 1, 1}; 
 
 	private static final int MAX_PICKUPS = 5;
-	private static final long RESPAWN_TIME = 10000L;
+	private static final long RESPAWN_TIME = 5000L;
 
 	private static List<Pickup> active = new ArrayList<>();
 	private static Timer respawnTimer = new Timer(RESPAWN_TIME);
@@ -28,8 +31,10 @@ public class PickupFactory {
 				return new HealthPickup(game, type, 50);
 			case HEALTH_100:
 				return new HealthPickup(game, type, 100);
+			case AMMO:
+				return new AmmoPickup(game, type);
 			default:
-				return null;
+				return new WeaponPickup(game, type, Weapon.byId[type-WEAPON_BASE]);
 		}
 	}
 	

@@ -11,23 +11,29 @@ public class Projectile extends Entity<Projectile> {
 
 	public static final int TYPE_MINI = 0;
 	public static final int TYPE_SPREAD = 1;
+	public static final int TYPE_PLASMA = 2;
 	
 	public static class ProjectileInfo {
 		public final float speed;
 		public final Color color;
-		public final float traceLength;
+		public final float size;
+		public final boolean circle;
 		public final int damage;
-		public ProjectileInfo(float speed, Color color, float traceLength, int damage) {
+		public final float pushFactor;
+		public ProjectileInfo(float speed, Color color, float size, boolean circle, int damage, float pushFactor) {
 			this.speed = speed;
 			this.color = color;
-			this.traceLength = traceLength;
+			this.size = size;
+			this.circle = circle;
 			this.damage = damage;
+			this.pushFactor = pushFactor;
 		}
 	}
 	
 	public static final ProjectileInfo[] INFO = {
-		new ProjectileInfo(0.75f, new Color(0xffaa00), 20f, 7),
-		new ProjectileInfo(0.9f, new Color(0xee7700), 25f, 12),
+		new ProjectileInfo(0.75f, new Color(0xffaa00), 20f, false, 7, 0.05f),
+		new ProjectileInfo(1.0f, new Color(0xee7700), 25f, false, 15, 0.15f),
+		new ProjectileInfo(0.6f, new Color(0x7755ff), 5f, true, 10, 0.5f),
 	};
 	
 	public final Player owner;
@@ -52,12 +58,13 @@ public class Projectile extends Entity<Projectile> {
 	}
 	
 	public Projectile shoot(Player player, float da) {
-		da = (float)Math.PI*da/180f;
+		sling(player, da, INFO[type].speed, Player.RADIUS*2f+INFO[type].speed*25f);
+/*		da = (float)Math.PI*da/180f;
 		float pvx = (float)Math.cos(player.angle+da);
 		float pvy = (float)Math.sin(player.angle+da);
 		setVelocity(INFO[type].speed*pvx, INFO[type].speed*pvy);
 		setPosition(player.x+Player.RADIUS*2f*pvx+vx*25f, player.y+Player.RADIUS*2f*pvy+vy*25f);
-		updateAngle();
+		updateAngle();*/
 		return this;
 	}
 	
@@ -68,7 +75,10 @@ public class Projectile extends Entity<Projectile> {
 	
 	@Override
 	public void onOverlapPlayer(Player player) {
-		player.receiveDamage(INFO[type].damage, owner);
+		ProjectileInfo info = INFO[type];
+		if(info.pushFactor>0f)
+			player.push(vx*info.pushFactor, vy*info.pushFactor);
+		player.receiveDamage(info.damage, owner);
 		destroy();
 	}
 	

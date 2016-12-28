@@ -15,7 +15,6 @@ public class Player extends Entity<Player> {
 	public static final long RESPAWN_TIME = 3000L;
 	public static final long RESPAWN_SHIELD_TIME = 1000L;
 	public static final long PRIMARY_COOLDOWN_TIME = 125L;
-	public static final long SPREAD_COOLDOWN_TIME = 500L;
 	
 	public static final int RESPAWN_TIMER = 0;
 	public static final int EFFECT_TIMER = 1;
@@ -30,6 +29,9 @@ public class Player extends Entity<Player> {
 	public int health;
 	public Point mouse = new Point();
 	public int score = 0;
+	
+	public Weapon secondaryWeapon = null;
+	public int ammo = 0;
 	
 	private boolean[] triggers = new boolean[2];
 	
@@ -69,6 +71,8 @@ public class Player extends Entity<Player> {
 		this.vx = 0;
 		this.vy = 0;
 		this.health = 100;
+		this.secondaryWeapon = null;
+		this.ammo = 0;
 		timers[RESPAWN_TIMER].start();
 		timers[EFFECT_TIMER].start(RESPAWN_TIME+RESPAWN_SHIELD_TIME);
 		timers[PRIMARY_COOLDOWN].reset();
@@ -150,6 +154,21 @@ public class Player extends Entity<Player> {
 		game.net.broadcastMessage(new MsgPlayerStatus(this, MsgPlayerStatus.HEALTH, this.health), null);
 	}
 	
+	public void setSecondaryWeapon(Weapon secondaryWeapon) {
+		this.secondaryWeapon = secondaryWeapon;
+		if(game.isServer())
+			game.net.broadcastMessage(new MsgPlayerStatus(this, MsgPlayerStatus.SECONDARY_WEAPON, secondaryWeapon.id), null);
+		fillAmmo();
+	}
+	
+	public void fillAmmo() {
+		if(secondaryWeapon!=null) {
+			ammo = secondaryWeapon.maxAmmo;
+			if(game.isServer())
+				game.net.broadcastMessage(new MsgPlayerStatus(this, MsgPlayerStatus.AMMO, ammo), null);
+		}
+	}
+	
 	protected void updateTimers(long dt) {
 		for(Timer timer : timers)
 			timer.update(dt);
@@ -162,12 +181,13 @@ public class Player extends Entity<Player> {
 				game.addEntity(new Projectile(game, this, Projectile.TYPE_MINI).shoot(this, 0f));
 				getTimer(PRIMARY_COOLDOWN).start();
 			}
-			/*if(game.isServer() && !getTimer(SECONDARY_COOLDOWN).isActive() && triggers[SECONDARY_TRIGGER]) {
-				for(int i=-3; i<=3; i++) {
-					game.addProjectile(new Projectile(game, this, Projectile.TYPE_SPREAD).shoot(this, i*5f));
+			if(game.isServer() && secondaryWeapon!=null && ammo>0 && !getTimer(SECONDARY_COOLDOWN).isActive() && triggers[SECONDARY_TRIGGER]) {
+				if(secondaryWeapon.fire(this)) {
+					ammo--;
+					game.net.broadcastMessage(new MsgPlayerStatus(this, MsgPlayerStatus.AMMO, ammo), null);
+					getTimer(SECONDARY_COOLDOWN).start(secondaryWeapon.cooldown);
 				}
-				getTimer(SECONDARY_COOLDOWN).start(SPREAD_COOLDOWN_TIME);
-			}*/
+			}
 		}
 		
 		updateTimers(dt);

@@ -55,6 +55,16 @@ public abstract class Entity<T extends Entity<T>> {
 		this.destroyed = true;
 	}
 	
+	protected Entity<T> sling(Entity<?> origin, float da, float speed, float forward) {
+			da = (float)Math.PI*da/180f;
+			float pvx = (float)Math.cos(origin.angle+da);
+			float pvy = (float)Math.sin(origin.angle+da);
+			setVelocity(speed*pvx, speed*pvy);
+			setPosition(origin.x+forward*pvx, origin.y+forward*pvy);
+			updateAngle();
+			return this;
+	}
+	
 	protected boolean checkClip() {
 		return !Game.CLIP_RECT.contains(this.x, this.y);
 	}

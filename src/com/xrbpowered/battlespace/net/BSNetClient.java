@@ -78,6 +78,8 @@ public class BSNetClient extends NetClient {
 				return new MsgSpawnPickup(in);
 			case MsgSpawnExplosion.CMD:
 				return new MsgSpawnExplosion(in);
+			case MsgSpawnMissile.CMD:
+				return new MsgSpawnMissile(in);
 				
 			case MsgChat.CMD:
 				return new MsgChat(in.readUTF());

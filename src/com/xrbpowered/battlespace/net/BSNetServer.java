@@ -57,6 +57,8 @@ public class BSNetServer extends NetServer {
 				target.addMessage(new MsgPlayerStatus(info.player, MsgPlayerStatus.SCORE, info.player.score));
 				target.addMessage(new MsgPlayerStatus(info.player, MsgPlayerStatus.RESPAWN_TIMER, (int) info.player.getTimer(Player.RESPAWN_TIMER).remaining()));
 				target.addMessage(new MsgPlayerStatus(info.player, MsgPlayerStatus.EFFECT_TIMER, (int) info.player.getTimer(Player.EFFECT_TIMER).remaining()));
+				target.addMessage(new MsgPlayerStatus(info.player, MsgPlayerStatus.SECONDARY_WEAPON, info.player.secondaryWeapon==null ? -1 : info.player.secondaryWeapon.id));
+				target.addMessage(new MsgPlayerStatus(info.player, MsgPlayerStatus.AMMO, info.player.ammo));
 			}
 		}
 		for(Entity<?> e : game.entities) {

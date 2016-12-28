@@ -10,7 +10,7 @@ public class Explosion extends Entity<Explosion> {
 	public static final long DURATION = 250L;
 	public static final float BASE_DAMAGE = 100f;
 	public static final float BASE_HIT_RADIUS= 300f;
-	public static final float BASE_PUSH = 2f;
+	public static final float BASE_PUSH = 1f;
 	
 	public final float power;
 	public final Player owner;

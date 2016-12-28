@@ -5,46 +5,42 @@ import java.awt.Color;
 import com.xrbpowered.battlespace.ui.EntityRenderer;
 import com.xrbpowered.battlespace.ui.PickupRenderer;
 
-public class HealthPickup extends Pickup {
-
-	private static final Color COLOR = new Color(0x00bb00);
-	private static final Color MEGA_COLOR = new Color(0x77ff33);
+public class WeaponPickup extends Pickup {
 	
-	public final int hp;
-	private final String label;
+	private static final Color COLOR = new Color(0xffbb77);
 	
-	public HealthPickup(Game game, int type, int hp) {
+	public final Weapon weapon;
+	
+	public WeaponPickup(Game game, int type, Weapon weapon) {
 		super(game, type);
-		this.hp = hp;
-		this.label = String.format("+%d hp", hp);
+		this.weapon = weapon;
 	}
 	
 	@Override
 	public EntityRenderer<Pickup> renderer() {
-		return PickupRenderer.healthRenderer;
+		return PickupRenderer.weaponRenderer;
 	}
 	
 	@Override
 	public void onOverlapPlayer(Player player) {
 		if(!destroyed) {
-			player.restoreHealth(hp);
+			player.setSecondaryWeapon(weapon);
 		}
 		super.onOverlapPlayer(player);
 	}
 
 	@Override
 	public float getRadius() {
-		return hp>=100 ? LARGE_RADIUS : SMALL_RADIUS;
+		return LARGE_RADIUS;
 	}
 	
 	@Override
 	public Color getColor() {
-		return hp>=100 ? MEGA_COLOR : COLOR;
+		return COLOR;
 	}
 
 	@Override
 	public String getLabel() {
-		return label;
+		return weapon.name;
 	}
-	
 }

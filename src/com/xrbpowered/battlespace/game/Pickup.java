@@ -7,8 +7,10 @@ import com.xrbpowered.net.NetMessage;
 
 public abstract class Pickup extends Entity<Pickup> {
 
-	public static final float RADIUS = 10.0f;
-	public static final float PICK_RADIUS = RADIUS * 1.5f;
+	public static final float SMALL_RADIUS = 10f;
+	public static final float LARGE_RADIUS = 15f;
+	
+	public static final float PICK_RADIUS_MOD = 10f;
 	
 	public final int type;
 
@@ -25,6 +27,10 @@ public abstract class Pickup extends Entity<Pickup> {
 	
 	public abstract Color getColor();
 	public abstract String getLabel();
+
+	public float getRadius() {
+		return SMALL_RADIUS;
+	}
 	
 	@Override
 	protected void destroy() {
@@ -45,6 +51,6 @@ public abstract class Pickup extends Entity<Pickup> {
 	
 	@Override
 	public void update(long dt) {
-		checkPlayerOverlaps(Player.RADIUS+PICK_RADIUS);
+		checkPlayerOverlaps(Player.RADIUS+getRadius()+PICK_RADIUS_MOD);
 	}
 }
