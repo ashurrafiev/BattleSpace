@@ -34,6 +34,7 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.JPanel;
@@ -122,8 +123,14 @@ public class BattlePane extends JPanel {
 	
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	private void renderEntities(Graphics2D g2) {
-		for(Entity e : client.getGame().entities) {
-			e.renderer().render(g2, e);
+		List<Entity<?>> list = client.getGame().entities;
+		for(int i=0; i<list.size(); i++) {
+			try {
+				Entity e = list.get(i);
+				e.renderer().render(g2, e);
+			}
+			catch(Exception ex) {
+			}
 		}
 	}
 	

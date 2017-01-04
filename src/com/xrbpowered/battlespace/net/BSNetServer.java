@@ -53,6 +53,7 @@ public class BSNetServer extends NetServer {
 	public void addGame(GameServer game) {
 		this.game = game;
 		open();
+		startPacketCollector();
 	}
 	
 	@Override

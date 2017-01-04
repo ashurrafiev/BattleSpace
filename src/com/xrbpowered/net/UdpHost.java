@@ -84,11 +84,11 @@ public class UdpHost {
 		}
 	}
 	
-	public DatagramPacket receive(int maxLength) {
+	public DatagramPacket receive(int maxLength, int timeout) {
 		try {
 			byte[] buf = new byte[maxLength];
 			DatagramPacket packet = new DatagramPacket(buf, buf.length);
-			socket.setSoTimeout(1);
+			socket.setSoTimeout(timeout);
 			socket.receive(packet);
 			return packet;
 		}

@@ -38,6 +38,7 @@ public abstract class NetBase {
 	public static final long INACTIVE_LIMIT = 1000L;
 
 	protected UdpHost host = new UdpHost();
+	protected PacketCollector packetCollector = null;
 	protected ArrayList<Connection> connections = new ArrayList<>();
 
 	public abstract boolean open();
@@ -47,9 +48,29 @@ public abstract class NetBase {
 		return 0;
 	}
 	
+	protected void startPacketCollector() {
+		if(packetCollector==null) {
+			packetCollector = new PacketCollector(host, MAX_INCOMING_SIZE);
+			packetCollector.start();
+		}
+	}
+	
+	protected void stopPacketCollector() {
+		if(packetCollector!=null) {
+			packetCollector.interrupt();
+			packetCollector = null;
+		}
+	}
+	
 	public void update() {
 		for(;;) {
-			DatagramPacket p = host.receive(MAX_INCOMING_SIZE);
+			DatagramPacket p;
+			if(packetCollector!=null) {
+				p = packetCollector.receive();
+			}
+			else {
+				p = host.receive(MAX_INCOMING_SIZE, 1);
+			}
 			if(p==null)
 				break;
 			processMessages(p);

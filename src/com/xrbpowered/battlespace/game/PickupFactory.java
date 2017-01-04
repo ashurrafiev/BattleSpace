@@ -38,10 +38,10 @@ public class PickupFactory {
 	
 	public static final int WEAPON_BASE = 4;
 	
-	private static final int[] weights = {6, 3, 1, 4, 1, 1, 1, 1, 1, 1}; 
+	private static final int[] weights = {4, 2, 1, 6, 1, 1, 1, 1, 1, 1}; 
 
 	private static final int MAX_PICKUPS = 5;
-	private static final long RESPAWN_TIME = 5000L;
+	private static final long RESPAWN_TIME = 3000L;
 
 	private static List<Pickup> active = new ArrayList<>();
 	private static Timer respawnTimer = new Timer(RESPAWN_TIME);

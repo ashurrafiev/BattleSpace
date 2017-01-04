@@ -45,8 +45,9 @@ public class BSNetClient extends NetClient {
 		this.game = game;
 		this.login = login;
 		open(); // TODO connection progress display
+		startPacketCollector();
 	}
-
+	
 	@Override
 	public int getVersion() {
 		return BSNetServer.VERSION;

@@ -56,7 +56,7 @@ public class UpdateThread extends Thread {
 						}
 					});
 				}
-				Thread.sleep(20);
+				Thread.sleep(15);
 			}
 		}
 		catch(InterruptedException | InvocationTargetException e) {

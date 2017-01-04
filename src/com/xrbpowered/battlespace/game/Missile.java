@@ -53,7 +53,7 @@ public class Missile extends Entity<Missile> {
 	
 	public static final MissileInfo[] INFO = {
 		new MissileInfo(false, 10000L, 0.5f, 0f, 0.75f, 0.333f),
-		new MissileInfo(true, 5000L, 0.5f, 5f, 0.25f, 0.25f),
+		new MissileInfo(true, 5000L, 0.5f, 0.2f, 0.25f, 0.25f),
 	};
 	
 	public final Player owner;
@@ -106,7 +106,7 @@ public class Missile extends Entity<Missile> {
 		detonate();
 	}
 	
-	private void controlHoming() {
+	private void controlHoming(long dt) {
 		MissileInfo info = INFO[type];
 		Player target = null;
 		float distTarget = 0f;
@@ -126,9 +126,9 @@ public class Missile extends Entity<Missile> {
 				targetAngle += Math.PI*2f;
 			float a = angle;
 			if(a>targetAngle)
-				a -= Math.min(info.steer, Math.abs(angle-targetAngle));
+				a -= Math.min(info.steer*dt, Math.abs(angle-targetAngle));
 			else
-				a += Math.min(info.steer, Math.abs(angle-targetAngle));
+				a += Math.min(info.steer*dt, Math.abs(angle-targetAngle));
 			setAngleSpeed(a, info.speed);
 			game.net.broadcastMessage(new MsgEntityPos(this), null);
 		}
@@ -141,7 +141,7 @@ public class Missile extends Entity<Missile> {
 		if(!destroyed) {
 			if(game.isServer()) {
 				if(info.homing)
-					controlHoming();
+					controlHoming(dt);
 				age += dt;
 				if(age>info.maxAge)
 					detonate();
