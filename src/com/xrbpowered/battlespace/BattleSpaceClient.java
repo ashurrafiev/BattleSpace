@@ -25,12 +25,12 @@ package com.xrbpowered.battlespace;
 
 import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import com.sun.glass.events.KeyEvent;
 import com.xrbpowered.battlespace.game.ClientPlayer;
 import com.xrbpowered.battlespace.game.Game;
 import com.xrbpowered.battlespace.game.GameClient;
